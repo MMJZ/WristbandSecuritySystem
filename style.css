@@ -1,0 +1,75 @@
+* {
+  padding: 0;
+  border: 0;
+  margin: 0;
+}
+
+body {
+  background-image: url(paper.jpg);
+  background-size: cover;
+  background-repeat: no-repeat;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: 'Roboto', sans-serif;
+}
+
+form {
+  width: 100%;
+}
+
+input,
+button {
+  display: block;
+  font-size: 3em;
+  text-align: center;
+  border-radius: 5px;
+  appearance: none;
+  margin: 30px auto;
+  -webkit-appearance: none;
+  box-sizing: border-box;
+  outline: none;
+  border: 1px solid rgba(0,0,0,0.5);
+  font-weight: 300;
+}
+
+input {
+  max-width: 90%;
+  padding: 5px;
+  background-color: rgba(255,255,255,0.9);
+}
+
+button {
+  cursor: pointer;
+  background-color: rgba(120,190,240,1);
+  padding: 5px 20px;
+  color: white;
+  font-weight: 200;
+  transition: all 0.2s ease-in-out;
+}
+
+button:hover {
+  box-shadow: 0 0 10px rgba(0,0,0,0.8);
+}
+
+#checkbutton, #infobox {
+  display: none;
+}
+
+#infobox {
+  background: rgba(255,255,255,0.95);
+  border: 1px solid rgba(0,0,0,0.5);
+  border-radius: 5px;
+  font-size: 2em;
+  padding: 5px 10px;
+  font-weight: 200;
+}
+
+#infobox div {
+  margin: 20px 0;
+}
+
+body div div {
+  text-align: center;
+}

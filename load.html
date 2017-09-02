@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://www.gstatic.com/firebasejs/3.6.2/firebase.js"></script>
+  <link rel="stylesheet" href="style.css">
+  <script>
+    var pass, staffname;
+    var config = {
+      apiKey: "AIzaSyBgT_WotHdQwc4YX8IcC2tYPJ2BxPifS2Y",
+      authDomain: "hertfordjcr-bf40e.firebaseapp.com",
+      databaseURL: "https://hertfordjcr-bf40e.firebaseio.com",
+      storageBucket: "hertfordjcr-bf40e.appspot.com",
+      messagingSenderId: "318620778170"
+    };
+
+    function ready() {
+      var form = document.getElementById('sform');
+      if (form.attachEvent) form.attachEvent("submit", processForm);
+      else form.addEventListener("submit", processForm);
+      firebase.initializeApp(config);
+      pass = prompt("stick in the pass", "");
+      staffname = prompt("your name", "");
+    }
+    var checked;
+
+    function processForm(e) {
+      if (e && e.preventDefault) e.preventDefault();
+      firebase.auth().signInWithEmailAndPassword("wristbands@michaelagius.uk", pass).catch(function(error) {
+        alert(error.message);
+      }).then(function() {
+        var number = document.getElementById("number").value;
+        firebase.database().ref("/bands/" + number).once('value').then(function(snapshot) {
+          var vall = snapshot.val();
+          if (vall == null) alert("no entry");
+          else {
+            document.getElementById("namebox").innerHTML = vall.name;
+            var date = new Date(vall.time);
+            var options = {
+              weekday: "long",
+              year: "numeric",
+              month: "short",
+              day: "numeric",
+              hour: "2-digit",
+              minute: "2-digit"
+            };
+            document.getElementById("timebox").innerHTML = date.toLocaleTimeString("en-GB", options);
+            checked = vall.checked;
+            document.getElementById("checkedbox").innerHTML = vall.checked ? "checked" : "unchecked";
+            document.getElementById("checkbutton").innerHTML = vall.checked ? "check out" : "check in";
+            document.getElementById("staffbox").innerHTML = vall.staffname;
+            document.getElementById("checkbutton").style.display = "block";
+            document.getElementById("infobox").style.display = "block";
+          }
+        });
+      });
+      return false;
+    }
+
+    function check() {
+      firebase.auth().signInWithEmailAndPassword("wristbands@michaelagius.uk", pass).catch(function(error) {
+        alert(error.message);
+      }).then(function() {
+        var number = document.getElementById("number").value;
+        var updates = {};
+        updates['bands/' + number + "/time"] = new Date().getTime();
+        updates['bands/' + number + "/staffname"] = staffname;
+        updates['bands/' + number + "/checked"] = !checked;
+        firebase.database().ref().update(updates);
+        alert("entry updated");
+        processForm();
+      });
+    }
+  </script>
+</head>
+
+<body onload="ready()">
+  <div>
+    <form id="sform" method="POST" autocomplete="off">
+      <input id="number" type="number" name="number" min="1" max="1000" required>
+      <button id="getbox" type="submit">get</button>
+    </form>
+    <div id="infobox">
+      <div id="namebox"></div>
+      <div id="timebox"></div>
+      <div id="staffbox"></div>
+      <div id="checkedbox"></div>
+    </div>
+    <button id="checkbutton" onclick="check()"></div>
+  </div>
+</body>
+
+</html>
